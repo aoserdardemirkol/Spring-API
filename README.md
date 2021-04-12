@@ -1,6 +1,6 @@
 # Spring-API
 
-<strong>Kullanılanlar</strong><br>
+<b>Kullanılanlar</b><br>
 Spring<br>
 -spring-jpa<br>
 Postgresql<br>
