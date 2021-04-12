@@ -7,8 +7,8 @@
 - liquibase<br>
 - swagger<br>
 
-swagger 
-http://localhost:8080/swagger-ui/index.html#/
+swagger<br>
+http://localhost:8080/swagger-ui/index.html#/<br>
 adresinde kullanılabilir
 
 Araç Tipi, Araç Adı, Kapladığı Alan
