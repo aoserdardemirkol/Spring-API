@@ -1,11 +1,13 @@
 # Spring-API
 
-<b>Kullanılanlar</b><br>
-- Spring<br>
-- - spring-jpa<br>
-- Postgresql<br>
-- liquibase<br>
-- swagger<br>
+Kullanılanlar
+- Spring
+- - spring-jpa
+- Postgresql
+- liquibase
+- swagger
+
+DB Entity ve Liquibase ile oluşturulur
 
 swagger<br>
 http://localhost:8080/swagger-ui/index.html#/<br>
@@ -19,4 +21,4 @@ Araç Tipi, Araç Adı, Kapladığı Alan
 - Tip : 5 - Otobüs - 5 Birim;
 - Tip : 6 - Tır -  8 Birim;	
 
-DB Entity ve Liquibase ile oluşturulur
+
