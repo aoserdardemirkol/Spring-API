@@ -9,8 +9,8 @@ Kullanılanlar
 
 DB Entity ve Liquibase ile oluşturulur
 
-swagger<br>
-http://localhost:8080/swagger-ui/index.html#/<br>
+swagger
+http://localhost:8080/swagger-ui/index.html#/
 adresinde kullanılabilir
 
 Araç Tipi, Araç Adı, Kapladığı Alan
