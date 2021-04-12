@@ -2,7 +2,7 @@
 
 <b>Kullanılanlar</b><br>
 - Spring<br>
-- -spring-jpa<br>
+- - spring-jpa<br>
 - Postgresql<br>
 - liquibase<br>
 - swagger<br>
