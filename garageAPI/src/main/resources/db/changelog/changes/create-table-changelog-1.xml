@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="admin" id="1">
+        <createTable tableName="garage">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="tip" type="INT"/>
+            <column name="plaka" type="VARCHAR(255)"/>
+            <column name="alan" type="INT"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="garage"/>
+        </rollback>
+        <createTable tableName="garagealan">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="alan" type="INT"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="garagealan"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
