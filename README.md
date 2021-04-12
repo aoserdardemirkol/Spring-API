@@ -1,10 +1,15 @@
 # Spring-API
 
 Kullanılanlar
+
 Spring
+
 -spring-jpa
+
 Postgresql
+
 liquibase
+
 swagger
 
 swagger 
