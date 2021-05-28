@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.enterprise.inject.Model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 @ApiModel(value = "Garage Alan Api model documentation", description = "Model")
 @AllArgsConstructor
 @NoArgsConstructor
+@Model
 public class garagealan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,3 +26,6 @@ public class garagealan {
     @ApiModelProperty(value = "tip field of Islem object")
     private int alan;
 }
+
+
+

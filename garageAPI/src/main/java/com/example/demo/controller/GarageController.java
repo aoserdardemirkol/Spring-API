@@ -8,6 +8,8 @@ import com.example.demo.repository.garagealanrepo;
 import com.example.demo.repository.garagerepo;
 import com.example.demo.exception.AracAlreadyExistsException;
 import com.example.demo.exception.AracNotFoundException;
+import com.example.demo.service.Arac;
+import com.example.demo.service.AracFabrikasi;
 import com.example.demo.service.GarageService;
 import com.example.demo.service.Garaj;
 
@@ -32,8 +34,6 @@ public class GarageController {
     // Repository tanımlandı.
     @Autowired private garagerepo garagerepo;
     @Autowired private garagealanrepo garagealanrepo;
-
-    private GarageService garageService;
 
     // Service içerisinde bulunan Garaj class ı tanımlandı.
     private Garaj garaj = new Garaj();
@@ -71,6 +71,7 @@ public class GarageController {
     //        } else {
     //            return new ResponseEntity<>(garagerepo.findById(id), OK);
     //        }
+
     @GetMapping(path="/{id}")
     @ApiOperation(value = "Girilen id değerine göre aracın bilgilerini getirir")
     public ResponseEntity<garage> getArac(@PathVariable int id){
@@ -92,7 +93,7 @@ public class GarageController {
         // throw new GirisNotAcceptableException
         // throw new AracAlreadyExistsException
         // throw new TanımlıGarajNotExistsException gibi exceptionlar özelleştirldi.
-        if (garageService.getAracTip(garage.getTip(), garage.getPlaka()).getAlan() > garaj.getGarajBoyut())
+        if (getAracTip(garage.getTip(), garage.getPlaka()).getAlan() > garaj.getGarajBoyut())
             throw new GirisNotAcceptableException("Garajda yer yok önce çıkış yapılmalı");
         else if (garageByPlaka.isPresent())
             throw new AracAlreadyExistsException(garage.getPlaka() + " plakalı araç zaten garajda...");
@@ -105,7 +106,7 @@ public class GarageController {
             // garage tablosunda bulunan değerler atandı.
             // garage.getTip() metodu ile veriler soyut AracFabrikasina veriler gönderilerek
             // AracFabrikasının alt metotlarından girilen arac tipine göre kapladığı alan belirlendi.
-            newGarage.setAlan(garageService.getAracTip(garage.getTip(), garage.getPlaka()).getAlan());
+            newGarage.setAlan(getAracTip(garage.getTip(), garage.getPlaka()).getAlan());
             newGarage.setPlaka(garage.getPlaka());
             newGarage.setTip(garage.getTip());
 
@@ -116,26 +117,22 @@ public class GarageController {
         }
     }
 
-
-
     // girilen id ve diğer bilgilere göre aracın bilgileri güncellendi.
     // @PathVariable yerine @RequestParam da kullanılabilir.
     @ApiOperation(value = "Girilen id değerinin verileri güncellenebilir")
     @PutMapping("/update/{id}/{tip}/{plaka}")
     public ResponseEntity<garage> updateIslem(@PathVariable int id, @PathVariable int tip, @PathVariable String plaka) {
-        if (garageService.getAracTip(tip, plaka).getAlan() > garaj.getGarajBoyut())
+        if (getAracTip(tip, plaka).getAlan() > garaj.getGarajBoyut())
             // Eğer güncellenen araç boyutun değiştiğinde yeterli yer kalmıyor ise hata verildi.
             throw new GirisNotAcceptableException("Garajda yer yok önce çıkış yapılmalı");
         else {
             // Eğer hata yok ise updateIslemById() metoduna veriler gönderilerek güncelleme sağlandı.
-            garageService.updateIslemById(id, tip, plaka);
+            updateIslemById(id, tip, plaka);
             // Güncelleme yapıldıktan sora araç boyutunun güncellenmesi için metot çağırıldı.
             startFirst();
             return new ResponseEntity<>(OK);
         }
     }
-
-
 
     // Girilen plaka değerine göre araç veritabanından silindi.
     @ApiOperation(value = "Girilen plaka değerini siler Araç çıkışı yapılır.")
@@ -152,6 +149,32 @@ public class GarageController {
         // Eğer değer veritabanında yok ise hata döndürüldü.
         else
             throw new AracNotFoundException("Silmek istediğiniz araç garajda değil");
+    }
+
+    // Gönderilen değerler ile araç bilgilerinin güncellemesi sağlandı.
+    public void updateIslemById(int id, int tip, String plaka) {
+        // ıd değeri getAracById() metoduna gönderildi ve dönen değerler oldArac değerine eşitlendi.
+        garage oldArac = getAracById(id);
+
+        // Eski aracın bilgileri güncellendi.
+        oldArac.setTip(tip);
+        oldArac.setPlaka(plaka);
+        // Araç bilgileri getAracTip() metodu ikler getirildi.
+        oldArac.setAlan(getAracTip(tip, plaka).getAlan());
+        // Yeni bilgiler kaydedildi.
+        garagerepo.save(oldArac);
+    }
+
+    // Girilen id değerine göre garagerepo dan araç bilgileri getirildi.
+    public garage getAracById(int id) {
+        /// Eğer değer yok ise hata verildi.
+        return garagerepo.findById(id)
+                .orElseThrow(() -> new AracNotFoundException("Girilen id ye ait araç bulunamadı: " + id));
+    }
+
+    // AracFabrikasının alt metotlarından girilen arac tipine göre bilgiler getirildi.
+    public Arac getAracTip(int tip, String plaka){
+        return AracFabrikasi.getArac(tip, plaka);
     }
 
     // ExceptionHandler metodları

@@ -18,3 +18,5 @@ public interface garagerepo extends JpaRepository<garage, Integer> {
     @Query(value = "SELECT sum(alan) FROM garage")
     public int sumAlan();
 }
+
+

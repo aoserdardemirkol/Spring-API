@@ -6,7 +6,6 @@ import com.example.demo.exception.GirisNotAcceptableException;
 import com.example.demo.model.garagealan;
 import com.example.demo.repository.garagealanrepo;
 import com.example.demo.repository.garagerepo;
-import com.example.demo.service.GarageAlanService;
 import com.example.demo.service.Garaj;
 
 import io.swagger.annotations.Api;
@@ -30,7 +29,6 @@ public class GarageAlanController {
     @Autowired private garagerepo garagerepo;
 
     // Service içerisinde bulunan classlar tanımlandı.
-    private GarageAlanService garageAlanService;
     private Garaj garaj = new Garaj();
 
     // Model
@@ -43,9 +41,9 @@ public class GarageAlanController {
         if (garagealanrepo.count() != 0) {
 
             if (garagerepo.count() != 0)
-                garaj.setGarajBoyut(garageAlanService.getAlan() - garagerepo.sumAlan());
+                garaj.setGarajBoyut(getAlan() - garagerepo.sumAlan());
             else
-                garaj.setGarajBoyut(garageAlanService.getAlan());
+                garaj.setGarajBoyut(getAlan());
         }
     }
 
@@ -85,12 +83,12 @@ public class GarageAlanController {
                 } else {
                     garaj.setGarajBoyut(alan - garagerepo.sumAlan());
                     // updateAlanByAlan() metodu ile garaj boyutu güncellendi.
-                    garageAlanService.updateAlanByAlan(newgaragealan);
+                    updateAlanByAlan(newgaragealan);
                     return new ResponseEntity<>(OK);
                 }
             }
             else {
-                garageAlanService.updateAlanByAlan(newgaragealan);
+                updateAlanByAlan(newgaragealan);
                 return new ResponseEntity<>(OK);
             }
         }
@@ -107,6 +105,26 @@ public class GarageAlanController {
         return new ResponseEntity<>(OK);
     }
 
+    // Veritabanın da bulunan garajalanının değeri liste değişkenine atandı.
+    public int getAlan(){
+        List<garagealan> liste = garagealanrepo.findAll();
+        return liste.get(0).getAlan();
+    }
+
+    // updateAlanByAlan() metodu veri tabanında bulunan değeri güncellendi.
+    public void updateAlanByAlan(garagealan newgaragealan){
+        garagealan oldAlan = getAlanByAlan(getAlan());
+        oldAlan.setAlan(newgaragealan.getAlan());
+
+        garagealanrepo.save(oldAlan);
+    }
+
+    // Veritabanında bulunan garaj boyutunu getirildi.
+    public garagealan getAlanByAlan(int alan) {
+        return garagealanrepo.findByAlan(alan)
+                .orElseThrow(() -> new GarajboyutNotFoundException("Belirlenmiş bir garaj boyutu bulunamadı: " + alan));
+    }
+
     // ExceptionHandler metodları
     @ExceptionHandler(GarajboyutAlreadyExistsException.class)
     public ResponseEntity<String> handleGarajboyutAlreadyExistException(GarajboyutAlreadyExistsException ex){
@@ -115,6 +133,11 @@ public class GarageAlanController {
 
     @ExceptionHandler(GarajboyutNotFoundException.class)
     public ResponseEntity<String> handleGarajboyutNotFoundException(GarajboyutNotFoundException ex){
+        return new ResponseEntity<>(ex.getMessage(), NOT_FOUND);
+    }
+
+    @ExceptionHandler(GirisNotAcceptableException.class)
+    public ResponseEntity<String> handleGirisNotAcceptableException(GirisNotAcceptableException ex){
         return new ResponseEntity<>(ex.getMessage(), NOT_FOUND);
     }
 }

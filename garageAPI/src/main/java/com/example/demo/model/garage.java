@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.enterprise.inject.Model;
 import javax.persistence.*;
 
 // Veritabanında bulunan garage tablosunun verileri belirlendi.
@@ -16,6 +17,7 @@ import javax.persistence.*;
 // @AllArgsConstructor ve @NoArgsConstructor ile yapıcı metotlar oluşturuldu.
 @AllArgsConstructor
 @NoArgsConstructor
+@Model
 public class garage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,3 +33,4 @@ public class garage {
     @ApiModelProperty(value = "alan field of Islem object")
     private int alan;
 }
+
